@@ -3,63 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>삼각 퍼즐 - Triangle Flow</title>
+<title>삼각 퍼즐</title>
 <style>
-  :root { --bg:#0f1424; --card:#fff; --accent:#2f6bff; --text:#e8ecf8; }
+  :root { --text:#eaf0ff; --gold:#ffd54a; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html, body { margin:0; height:100%; background:var(--bg); color:var(--text);
-    font-family:-apple-system, "Noto Sans KR", "Malgun Gothic", sans-serif; overflow:hidden; }
-  #app { display:flex; flex-direction:column; height:100%; max-width:760px; margin:0 auto; padding:8px 12px 10px; gap:8px; }
-  header { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-  header h1 { font-size:18px; margin:0; letter-spacing:.5px; }
-  .stats { display:flex; gap:12px; font-size:14px; opacity:.9; font-variant-numeric:tabular-nums; }
-  #stage { flex:1; min-height:0; background:var(--card); border-radius:14px; overflow:hidden;
-    box-shadow:0 6px 24px rgba(0,0,0,.45); display:flex; }
-  svg { width:100%; height:100%; touch-action:none; user-select:none; -webkit-user-select:none; display:block; }
-  .piece { cursor:grab; }
+  html, body { margin:0; height:100%; color:var(--text); overflow:hidden;
+    font-family:-apple-system, "Noto Sans KR", "Malgun Gothic", sans-serif; }
+  body {
+    background:
+      radial-gradient(2px 2px at 12% 22%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.5px 1.5px at 82% 12%, rgba(130,220,255,.9), transparent),
+      radial-gradient(2px 2px at 70% 58%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 28% 76%, rgba(130,220,255,.8), transparent),
+      radial-gradient(2px 2px at 92% 86%, rgba(255,255,255,.7), transparent),
+      radial-gradient(2px 2px at 6% 90%, rgba(255,200,255,.7), transparent),
+      radial-gradient(ellipse at 50% -10%, #5b3fd1 0%, #2a2a8f 38%, #0b0f45 100%);
+    background-attachment:fixed;
+  }
+  #app { display:flex; flex-direction:column; height:100%; max-width:760px; margin:0 auto; padding:10px 12px 12px; gap:8px; }
+
+  /* HUD */
+  header { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
+    background:linear-gradient(#ffffff14,#ffffff06); border:1px solid #ffffff1f; border-radius:18px; padding:8px 10px; }
+  .pill { display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:15px; font-variant-numeric:tabular-nums;
+    background:#0a0f3c99; border:1px solid #ffffff26; border-radius:999px; padding:6px 12px; justify-self:start; box-shadow:inset 0 2px 6px #0006; }
+  .pill.right { justify-self:end; }
+  .pill small { font-weight:600; opacity:.6; font-size:11px; }
+  .center { display:flex; align-items:center; gap:6px; }
+  .badge { width:78px; height:78px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 35% 25%, #8fd0ff, #2f6bff 55%, #1b2f9e);
+    border:4px solid #ffd54a; box-shadow:0 0 0 3px #7a4a10, 0 6px 16px #0008, 0 0 24px #4de1ff66, inset 0 -6px 10px #0004; margin:-14px 0 -10px; }
+  .badge small { font-size:10px; letter-spacing:1.5px; font-weight:800; opacity:.9; text-shadow:0 1px 2px #0008; }
+  .badge b { font-size:28px; line-height:1; text-shadow:0 2px 4px #0009; }
+  .nav { width:34px; height:34px; border-radius:50%; padding:0; font-size:14px; line-height:1;
+    background:linear-gradient(#ffffff26,#ffffff0d); border:1px solid #ffffff33; }
+  #stars { text-align:center; font-size:26px; letter-spacing:6px; margin:6px 0 -2px; color:#ffffff30; text-shadow:0 2px 0 #0004; }
+  #stars .on { color:var(--gold); text-shadow:0 0 12px #ffb300, 0 2px 0 #7a4a10; }
+
+  #stage { flex:1; min-height:0; display:flex; }
+  svg { width:100%; height:100%; touch-action:none; user-select:none; -webkit-user-select:none; display:block; overflow:visible; }
+  .piece { cursor:grab; filter:url(#shadow); }
+  .piece.sel { filter:url(#shadowSel); }
   .piece.drag { cursor:grabbing; }
-  .piece polygon { stroke:#fff; stroke-width:.05; stroke-linejoin:round; fill-opacity:.9; }
-  .piece.sel polygon { stroke:#111; stroke-width:.06; }
+  .piece polygon { stroke:rgba(255,255,255,.7); stroke-width:.035; stroke-linejoin:round; }
+  .piece polygon.facet { stroke:none; pointer-events:none; }
   .piece.snap { transition:transform .15s ease-out; }
-  .toolbar { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
-  button { font:inherit; font-size:14px; color:var(--text); background:#1d2540; border:1px solid #2c3760;
-    border-radius:10px; padding:9px 12px; cursor:pointer; }
-  button:active { background:#2a3560; }
-  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
-  #win { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(8,12,24,.65); z-index:10; }
+
+  /* 버튼 */
+  .toolbar { display:flex; gap:10px; justify-content:center; }
+  .gbtn { display:flex; flex-direction:column; align-items:center; gap:4px; background:none; border:0; padding:0; color:var(--text);
+    font:inherit; font-size:11px; font-weight:700; cursor:pointer; text-shadow:0 1px 2px #000a; }
+  .gbtn i { font-style:normal; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px;
+    border:3px solid #ffffffcc; box-shadow:0 5px 0 #0006, 0 8px 14px #0007, inset 0 4px 6px #fff6, inset 0 -6px 8px #0003; transition:transform .08s; }
+  .gbtn:active i { transform:translateY(4px); box-shadow:0 1px 0 #0006, inset 0 4px 6px #fff6; }
+  .c-blue i   { background:linear-gradient(#6fc3ff,#2f6bff); }
+  .c-purple i { background:linear-gradient(#c58bff,#7a3fe0); }
+  .c-gold i   { background:linear-gradient(#ffe27a,#ff9d1a); }
+  .c-green i  { background:linear-gradient(#7ff0a0,#1faa55); }
+  .c-pink i   { background:linear-gradient(#ff9ac4,#e0306f); }
+  .help { font-size:11px; text-align:center; opacity:.6; }
+
+  /* 승리 */
+  #win { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(5,8,32,.72); z-index:10; overflow:hidden; }
   #win.show { display:flex; }
-  #win .box { background:#fff; color:#111; padding:26px 30px; border-radius:18px; text-align:center; min-width:240px;
-    animation:pop .35s cubic-bezier(.2,1.4,.4,1); }
-  #win h2 { margin:0 0 6px; font-size:26px; }
-  #win p { margin:0 0 16px; color:#555; }
-  #win .row { display:flex; gap:8px; justify-content:center; }
-  #win button { color:#fff; }
-  #win button.sec { background:#e5e9f5; color:#222; border-color:#e5e9f5; }
+  #win .box { position:relative; background:linear-gradient(#3b3fc4,#1a1f6b); color:#fff; padding:26px 30px 22px; border-radius:22px; text-align:center; min-width:270px;
+    border:4px solid var(--gold); box-shadow:0 0 0 3px #7a4a10, 0 14px 40px #000a, 0 0 50px #ffd54a55; animation:pop .4s cubic-bezier(.2,1.4,.4,1); }
+  #win h2 { margin:0; font-size:30px; text-shadow:0 3px 0 #0006; }
+  .wstars { font-size:46px; letter-spacing:6px; margin:6px 0; }
+  .wstars span { display:inline-block; color:#ffffff30; }
+  .wstars span.on { color:var(--gold); text-shadow:0 0 18px #ffb300, 0 3px 0 #7a4a10; animation:starin .5s both; }
+  #win p { margin:0 0 16px; opacity:.85; }
+  #win .row { display:flex; gap:10px; justify-content:center; }
+  .btn { font:inherit; font-weight:800; font-size:15px; color:#fff; border:3px solid #ffffffcc; border-radius:999px; padding:10px 20px; cursor:pointer;
+    background:linear-gradient(#6fc3ff,#2f6bff); box-shadow:0 4px 0 #0006, inset 0 3px 5px #fff6; }
+  .btn.sec { background:linear-gradient(#c9a8ff,#7a3fe0); }
+  .btn:active { transform:translateY(3px); box-shadow:0 1px 0 #0006; }
+  .confetti { position:absolute; top:-20px; width:9px; height:14px; border-radius:2px; animation:fall linear forwards; pointer-events:none; }
+  @keyframes fall { to { transform:translateY(110vh) rotate(720deg); } }
   @keyframes pop { from { transform:scale(.6); opacity:0; } to { transform:scale(1); opacity:1; } }
-  .help { font-size:12px; text-align:center; opacity:.65; }
+  @keyframes starin { from { transform:scale(2.4) rotate(-30deg); opacity:0; } to { transform:scale(1); opacity:1; } }
+  @media (max-height:640px) { .badge { width:64px; height:64px; } .badge b { font-size:22px; } .gbtn i { width:46px; height:46px; font-size:20px; } .help { display:none; } }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>▲ 삼각 퍼즐</h1>
-    <div class="stats"><span id="lvl">레벨 1</span><span id="time">0:00</span></div>
+    <div class="pill"><span>🏆</span><span id="best">--</span></div>
+    <div class="center">
+      <button class="nav" id="bPrev">◀</button>
+      <div class="badge" id="lvl"><small>LEVEL</small><b>1</b></div>
+      <button class="nav" id="bNext">▶</button>
+    </div>
+    <div class="pill right"><span>⏱</span><span id="time">0:00</span></div>
   </header>
+  <div id="stars">★★★</div>
   <div id="stage"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
   <div class="toolbar">
-    <button id="bRot">↻ 회전</button>
-    <button id="bFlip">⇋ 뒤집기</button>
-    <button id="bHint">💡 힌트</button>
-    <button id="bReset">⟲ 다시</button>
-    <button id="bPrev">◀</button>
-    <button id="bNext">▶</button>
-    <button id="bRand">🎲 새 퍼즐</button>
+    <button class="gbtn c-blue" id="bRot"><i>↻</i>회전</button>
+    <button class="gbtn c-purple" id="bFlip"><i>⇋</i>뒤집기</button>
+    <button class="gbtn c-gold" id="bHint"><i>💡</i>힌트</button>
+    <button class="gbtn c-green" id="bReset"><i>⟲</i>다시</button>
+    <button class="gbtn c-pink" id="bRand"><i>🎲</i>새 퍼즐</button>
   </div>
-  <div class="help">조각을 끌어 윤곽에 맞추세요 · 탭 = 회전 · 우클릭/뒤집기 버튼 = 뒤집기 (R / F 키)</div>
+  <div class="help">조각을 끌어 윤곽에 맞추세요 · 탭 = 회전 · 우클릭 = 뒤집기 (R / F 키)</div>
 </div>
 <div id="win"><div class="box">
-  <h2>🎉 완성!</h2><p id="winMsg"></p>
-  <div class="row"><button class="sec" id="wAgain">다시하기</button><button class="primary" id="wNext">다음 레벨</button></div>
+  <h2>🎉 완성!</h2><div class="wstars" id="wStars"></div><p id="winMsg"></p>
+  <div class="row"><button class="btn sec" id="wAgain">다시하기</button><button class="btn" id="wNext">다음 레벨</button></div>
 </div></div>
 
 <script>
@@ -211,19 +261,48 @@ function el(name, attrs = {}, parent) {
   return e;
 }
 
+const shade = (hex, t) => {                           // t>0: 밝게, t<0: 어둡게
+  const n = parseInt(hex.slice(1), 16), tgt = t > 0 ? 255 : 0, a = Math.abs(t);
+  const ch = sh => Math.round(((n >> sh) & 255) * (1 - a) + tgt * a);
+  return `rgb(${ch(16)},${ch(8)},${ch(0)})`;
+};
+function insetPoints(r, c, k) {
+  const [cx, cy] = centroid(r, c);
+  return verts(r, c).map(([vx, vr]) => { const [x, y] = toXY(vx, vr); return `${cx + (x - cx) * k},${cy + (y - cy) * k}`; }).join(' ');
+}
+function makeDefs() {
+  const d = el('defs', {}, svg);
+  COLORS.forEach((col, i) => {
+    const g = el('linearGradient', { id: 'g' + i, x1: 0, y1: 0, x2: 0, y2: 1 }, d);
+    [[0, shade(col, .5)], [.5, col], [1, shade(col, -.32)]].forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, g));
+  });
+  const hi = el('linearGradient', { id: 'hi', x1: 0, y1: 0, x2: 0, y2: 1 }, d);
+  el('stop', { offset: 0, 'stop-color': '#fff', 'stop-opacity': .65 }, hi);
+  el('stop', { offset: 1, 'stop-color': '#fff', 'stop-opacity': 0 }, hi);
+  const sh = el('filter', { id: 'shadow', x: '-30%', y: '-30%', width: '160%', height: '170%' }, d);
+  el('feDropShadow', { dx: 0, dy: .08, stdDeviation: .06, 'flood-color': '#000', 'flood-opacity': .5 }, sh);
+  const ss = el('filter', { id: 'shadowSel', x: '-30%', y: '-30%', width: '160%', height: '170%' }, d);
+  el('feDropShadow', { dx: 0, dy: .08, stdDeviation: .1, 'flood-color': '#9fe8ff', 'flood-opacity': 1 }, ss);
+  const gl = el('filter', { id: 'glow', x: '-20%', y: '-20%', width: '140%', height: '140%' }, d);
+  el('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: .09, result: 'b' }, gl);
+  const mg = el('feMerge', {}, gl);
+  el('feMergeNode', { in: 'b' }, mg); el('feMergeNode', { in: 'b' }, mg); el('feMergeNode', { in: 'SourceGraphic' }, mg);
+}
+
 function render() {
   svg.innerHTML = '';
   svg.setAttribute('viewBox', `0 0 ${G.W} ${G.Hh}`);
-  // 트레이 배경
-  el('rect', { x: 0, y: G.trayTop, width: G.W, height: G.Hh - G.trayTop, fill: '#eef1f7' }, svg);
-  el('line', { x1: 0, x2: G.W, y1: G.trayTop, y2: G.trayTop, stroke: '#d5dae8', 'stroke-width': .06 }, svg);
+  makeDefs();
+  // 보드 패널 / 트레이 패널
+  el('rect', { x: .05, y: .05, width: G.W - .1, height: G.trayTop - .2, rx: .35, fill: 'rgba(8,12,60,.55)', stroke: 'rgba(120,200,255,.35)', 'stroke-width': .05 }, svg);
+  el('rect', { x: .05, y: G.trayTop + .1, width: G.W - .1, height: G.Hh - G.trayTop - .15, rx: .35, fill: 'rgba(6,8,40,.5)', stroke: 'rgba(255,255,255,.12)', 'stroke-width': .04 }, svg);
 
-  // 보드: 목표 칸 + 윤곽선
+  // 보드: 목표 칸 + 네온 윤곽선
   const gb = el('g', { transform: `translate(${G.ox},${G.oy})` }, svg);
   const edgeCount = new Map();
   for (const k of G.target) {
     const [r, c] = k.split(',').map(Number);
-    el('polygon', { points: polyPoints(r, c), fill: '#f7f9ff', stroke: '#c3cadd', 'stroke-width': .03 }, gb);
+    el('polygon', { points: polyPoints(r, c), fill: '#0d1750', stroke: 'rgba(110,170,255,.4)', 'stroke-width': .03 }, gb);
     const v = verts(r, c);
     for (let i = 0; i < 3; i++) {
       const a = v[i], b = v[(i + 1) % 3];
@@ -231,11 +310,12 @@ function render() {
       edgeCount.set(ek, (edgeCount.get(ek) || 0) + 1);
     }
   }
+  const outline = el('g', { filter: 'url(#glow)', 'pointer-events': 'none' }, gb);
   for (const [ek, cnt] of edgeCount) {
     if (cnt !== 1) continue;
     const [a, b] = ek.split('|').map(s => s.split(',').map(Number));
     const [x1, y1] = toXY(...a), [x2, y2] = toXY(...b);
-    el('line', { x1, y1, x2, y2, stroke: '#111', 'stroke-width': .09, 'stroke-linecap': 'round' }, gb);
+    el('line', { x1, y1, x2, y2, stroke: '#5ee7ff', 'stroke-width': .09, 'stroke-linecap': 'round' }, outline);
   }
   G.hintG = el('g', { transform: `translate(${G.ox},${G.oy})`, 'pointer-events': 'none' }, svg);
   G.ghostG = el('g', { transform: `translate(${G.ox},${G.oy})`, 'pointer-events': 'none' }, svg);
@@ -245,7 +325,11 @@ function render() {
 
 function drawPiece(p) {
   p.el.innerHTML = '';
-  for (const [r, c] of p.cells) el('polygon', { points: polyPoints(r, c), fill: p.color }, p.el);
+  const gi = COLORS.indexOf(p.color);
+  for (const [r, c] of p.cells) {
+    el('polygon', { points: polyPoints(r, c), fill: `url(#g${gi})` }, p.el);
+    el('polygon', { points: insetPoints(r, c, .56), fill: 'url(#hi)', class: 'facet' }, p.el);
+  }
   p.el.classList.toggle('sel', G.sel === p);
   setPos(p, p.pos.x, p.pos.y);
 }
@@ -371,12 +455,35 @@ function checkWin() {
   for (const q of G.pieces) if (q.placed) n += q.cells.length;
   if (n !== G.target.size) return;
   G.done = true; clearInterval(timer);
-  const t = fmt(elapsed);
-  document.getElementById('winMsg').textContent = `걸린 시간 ${t}`;
+  const par = G.pieces.length * 14, stars = elapsed <= par ? 3 : elapsed <= par * 2 ? 2 : 1;
+  setStars(stars);
+  document.getElementById('wStars').innerHTML = [1, 2, 3].map(i => `<span class="${i <= stars ? 'on' : ''}" style="animation-delay:${i * .25}s">★</span>`).join('');
+  let msg = `걸린 시간 ${fmt(elapsed)}`;
+  if (!randomMode) {
+    const prev = getBest();
+    if (!prev || elapsed < prev) { try { localStorage.setItem('tri-best-' + levelIdx, elapsed); } catch (_) {} if (prev) msg += ' · 🏆 신기록!'; }
+    showBest();
+  }
+  document.getElementById('winMsg').textContent = msg;
+  confetti();
   const last = !randomMode && levelIdx >= LEVELS.length - 1;
   document.getElementById('wNext').textContent = randomMode ? '새 퍼즐' : last ? '처음으로' : '다음 레벨';
   if (!randomMode) try { localStorage.setItem('tri-puzzle-max', Math.max(+(localStorage.getItem('tri-puzzle-max') || 0), levelIdx + 1)); } catch (_) {}
   setTimeout(() => document.getElementById('win').classList.add('show'), 350);
+}
+function setStars(n) {
+  document.getElementById('stars').innerHTML = [1, 2, 3].map(i => `<span class="${i <= n ? 'on' : ''}">★</span>`).join('');
+}
+function getBest() { try { return +localStorage.getItem('tri-best-' + levelIdx) || 0; } catch (_) { return 0; } }
+function showBest() { const b = randomMode ? 0 : getBest(); document.getElementById('best').textContent = b ? fmt(b) : '--'; }
+function confetti() {
+  const w = document.getElementById('win');
+  w.querySelectorAll('.confetti').forEach(n => n.remove());
+  for (let i = 0; i < 46; i++) {
+    const d = document.createElement('div'); d.className = 'confetti';
+    d.style.cssText = `left:${Math.random() * 100}%;background:${COLORS[i % COLORS.length]};animation-duration:${1.8 + Math.random() * 1.8}s;animation-delay:${Math.random() * .6}s`;
+    w.appendChild(d);
+  }
 }
 const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 function startTimer() {
@@ -390,20 +497,21 @@ function load(spec, seed, label) {
   document.getElementById('win').classList.remove('show');
   G = build(spec, seed);
   render();
-  document.getElementById('lvl').textContent = label;
+  document.getElementById('lvl').innerHTML = label;
+  setStars(0); showBest();
   startTimer();
 }
 function loadLevel(i) {
   randomMode = false;
   levelIdx = (i + LEVELS.length) % LEVELS.length;
-  load(LEVELS[levelIdx], 100 + levelIdx * 13, `레벨 ${levelIdx + 1}`);
+  load(LEVELS[levelIdx], 100 + levelIdx * 13, `<small>LEVEL</small><b>${levelIdx + 1}</b>`);
 }
 function loadRandom() {
   randomMode = true;
   const spec = LEVELS[Math.min(Math.max(levelIdx, 2), LEVELS.length - 1)];
-  load(spec, Math.floor(Math.random() * 1e6), '랜덤');
+  load(spec, Math.floor(Math.random() * 1e6), '<small>RANDOM</small><b>🎲</b>');
 }
-function replay() { randomMode ? load(G.spec, G.seed, '랜덤') : loadLevel(levelIdx); }
+function replay() { randomMode ? load(G.spec, G.seed, '<small>RANDOM</small><b>🎲</b>') : loadLevel(levelIdx); }
 
 document.getElementById('bRot').onclick = () => { if (G && !G.done && G.sel) transform(G.sel, 1, false); };
 document.getElementById('bFlip').onclick = () => { if (G && !G.done && G.sel) transform(G.sel, 0, true); };
