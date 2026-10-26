@@ -17,7 +17,20 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // 서명 키는 CI 시크릿으로만 주입한다. 키가 없으면 디버그 키로 서명(개인 테스트용).
+            val ks = System.getenv("KEYSTORE_PATH")
+            signingConfig = if (ks != null) {
+                signingConfigs.create("release") {
+                    storeFile = file(ks)
+                    storePassword = System.getenv("KEYSTORE_PASSWORD")
+                    keyAlias = System.getenv("KEY_ALIAS")
+                    keyPassword = System.getenv("KEY_PASSWORD")
+                }
+            } else signingConfigs.getByName("debug")
         }
     }
     compileOptions {
