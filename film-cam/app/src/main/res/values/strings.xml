@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">필름캠</string>
+    <string name="need_camera">카메라 권한이 필요해요</string>
+    <string name="saved">사진이 저장되었어요 ✨</string>
+    <string name="save_failed">저장에 실패했어요</string>
+    <string name="switch_camera">카메라 전환</string>
+    <string name="shutter">촬영</string>
+</resources>
