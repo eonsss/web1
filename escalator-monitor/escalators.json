@@ -1,0 +1,230 @@
+{
+  "defaults": {
+    "stop_delay_s": 30.0,
+    "stop_tolerance_s": 5.0,
+    "start_grace_s": 5.0,
+    "confirm_s": 2.0
+  },
+  "escalators": [
+    {
+      "id": 1,
+      "name": "1호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 2,
+      "name": "2호기",
+      "mode": "always_on",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 3,
+      "name": "3호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 4,
+      "name": "4호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 5,
+      "name": "5호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 6,
+      "name": "6호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "top",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 7,
+      "name": "7호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 8,
+      "name": "8호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 9,
+      "name": "9호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 10,
+      "name": "10호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 11,
+      "name": "11호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 12,
+      "name": "12호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "top",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 13,
+      "name": "13호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "top",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 14,
+      "name": "14호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "top",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 15,
+      "name": "15호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "top",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 16,
+      "name": "16호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 17,
+      "name": "17호기",
+      "mode": "always_on",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 18,
+      "name": "18호기",
+      "mode": "always_on",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 19,
+      "name": "19호기",
+      "mode": "always_on",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 20,
+      "name": "20호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 21,
+      "name": "21호기",
+      "mode": "standby",
+      "direction": "up",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    },
+    {
+      "id": 22,
+      "name": "22호기",
+      "mode": "standby",
+      "direction": "down",
+      "camera_position": "bottom",
+      "stream_url": null,
+      "stop_delay_s": null,
+      "start_grace_s": null
+    }
+  ]
+}
