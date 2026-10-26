@@ -1,0 +1,28 @@
+name: build-analyzer-exe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/escalator-malfunction-detection-c5nflu]
+    paths:
+      - escalator-monitor/**
+      - .github/workflows/build-analyzer-exe.yml
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: escalator-monitor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install opencv-python numpy pyinstaller
+      - run: python -I -m unittest discover -s tests
+      - run: pyinstaller --onefile --name analyze analyze.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: analyze-exe
+          path: escalator-monitor/dist/analyze.exe

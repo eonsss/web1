@@ -23,3 +23,12 @@
 3. 핸드레일 ROI 움직임 감지 -> `running`
 4. 사람 검출+트래킹, 가상 라인 -> `riders`, 진입/하차 이벤트
 5. 알림 UI, 22대 동시 처리, 섀도 모드(로그만)
+
+## 영상 분석 도구 (analyze.exe)
+영상 파일에서 운행/정지와 사람 유무를 뽑아 n(마지막 사람 -> 정지)을 계산한다.
+GitHub Actions(`build-analyzer-exe`)가 Windows에서 exe를 빌드한다 (Actions 탭 -> Artifacts -> analyze-exe).
+
+1. `analyze.exe`를 실행(또는 영상 파일을 exe 위로 드래그)
+2. 첫 화면에서 '운행 판정 영역'(핸드레일/발판 일부)을 드래그 후 Enter
+3. '사람 출입 영역'(하차 지점 바닥, 발판 제외)을 드래그 후 Enter
+4. 영상 옆에 `_analysis.csv`, `_analysis.png`, `_summary.txt` 저장
