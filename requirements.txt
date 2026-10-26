@@ -1,0 +1,4 @@
+numpy
+opencv-python-headless
+# 정확한 사람 검출(권장): ultralytics
+pytest
