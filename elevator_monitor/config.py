@@ -13,7 +13,8 @@ class ElevatorConfig:
     see_through: bool                 # True: 6~13호기(밖이 보임), False: 1~5호기(벽)
     camera: str = ""                  # RTSP URL 또는 영상 파일 경로
     # --- 판정 임계값(초). 현장 영상으로 calibrate 후 조정 ---
-    min_travel_sec: float = 8.0       # 문 닫힘→열림 최소 정상 이동시간(1개 층 이동 기준)
+    one_floor_sec: float | None = None     # 실측: 문 완전 닫힘→열리기 시작, 1개 층 이동 소요시간
+    min_travel_sec: float | None = None    # 미지정 시 one_floor_sec의 70%(없으면 8초). 인식 지연 여유분 포함
     door_close_timeout_sec: float = 12.0   # 탑승 후 문이 닫히지 않고 하차까지 허용하는 시간
     exit_window_sec: float = 10.0     # 문이 다시 열린 뒤 이 시간 안의 하차를 '내리는 동작'으로 봄
     min_inside_sec: float = 2.0       # 사람 인식 깜빡임 제거용 최소 탑승 시간
@@ -25,6 +26,10 @@ class ElevatorConfig:
     door_roi: list[float] = field(default_factory=lambda: [0.3, 0.0, 0.4, 1.0])
     window_roi: list[float] | None = None   # 밖이 보이는 유리창 영역(6~13호기)
 
+    def __post_init__(self) -> None:
+        if self.min_travel_sec is None:
+            self.min_travel_sec = 0.7 * self.one_floor_sec if self.one_floor_sec else 8.0
+
     @property
     def span(self) -> int:
         return self.floors[1] - self.floors[0] + 1
@@ -32,6 +37,8 @@ class ElevatorConfig:
     @property
     def max_closed_sec(self) -> float:
         """(벽 호기) 이보다 오래 문이 닫혀 있으면 갇힘 가능성으로 알림."""
+        if self.one_floor_sec:
+            return 2 * self.one_floor_sec * (self.span - 1) + 30.0
         return 3 * (25.0 + 6.0 * (self.span - 1))
 
 
@@ -40,7 +47,7 @@ def load_config(path: str | Path) -> dict[int, ElevatorConfig]:
     defaults = raw.get("defaults", {})
     out: dict[int, ElevatorConfig] = {}
     for item in raw["elevators"]:
-        merged = {**defaults, **item}
+        merged = {k: v for k, v in {**defaults, **item}.items() if not k.startswith("_")}
         cfg = ElevatorConfig(**merged)
         out[cfg.id] = cfg
     return out

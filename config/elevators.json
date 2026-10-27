@@ -1,21 +1,188 @@
 {
   "defaults": {
-    "min_travel_sec": 8.0,
     "door_close_timeout_sec": 12.0
   },
   "elevators": [
-    {"id": 1,  "floors": [1, 5],  "see_through": false, "camera": "rtsp://CCTV_IP/ev01"},
-    {"id": 2,  "floors": [1, 1],  "see_through": false, "camera": "rtsp://CCTV_IP/ev02", "_note": "층 범위를 현장에 맞게 수정"},
-    {"id": 3,  "floors": [1, 1],  "see_through": false, "camera": "rtsp://CCTV_IP/ev03", "_note": "층 범위를 현장에 맞게 수정"},
-    {"id": 4,  "floors": [1, 5],  "see_through": false, "camera": "rtsp://CCTV_IP/ev04"},
-    {"id": 5,  "floors": [1, 5],  "see_through": false, "camera": "rtsp://CCTV_IP/ev05"},
-    {"id": 6,  "floors": [1, 1],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev06", "window_roi": [0.0, 0.0, 0.3, 0.6], "_note": "층 범위를 현장에 맞게 수정"},
-    {"id": 7,  "floors": [1, 1],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev07", "window_roi": [0.0, 0.0, 0.3, 0.6]},
-    {"id": 8,  "floors": [1, 1],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev08", "window_roi": [0.0, 0.0, 0.3, 0.6]},
-    {"id": 9,  "floors": [1, 3],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev09", "window_roi": [0.0, 0.0, 0.3, 0.6]},
-    {"id": 10, "floors": [1, 1],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev10", "window_roi": [0.0, 0.0, 0.3, 0.6]},
-    {"id": 11, "floors": [1, 3],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev11", "window_roi": [0.0, 0.0, 0.3, 0.6]},
-    {"id": 12, "floors": [1, 1],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev12", "window_roi": [0.0, 0.0, 0.3, 0.6]},
-    {"id": 13, "floors": [1, 1],  "see_through": true,  "camera": "rtsp://CCTV_IP/ev13", "window_roi": [0.0, 0.0, 0.3, 0.6]}
+    {
+      "id": 1,
+      "floors": [
+        1,
+        5
+      ],
+      "see_through": false,
+      "camera": "rtsp://CCTV_IP/ev01",
+      "one_floor_sec": 18.0
+    },
+    {
+      "id": 2,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": false,
+      "camera": "rtsp://CCTV_IP/ev02",
+      "_note": "층 범위를 현장에 맞게 수정",
+      "one_floor_sec": 18.0
+    },
+    {
+      "id": 3,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": false,
+      "camera": "rtsp://CCTV_IP/ev03",
+      "_note": "층 범위를 현장에 맞게 수정",
+      "one_floor_sec": 18.0
+    },
+    {
+      "id": 4,
+      "floors": [
+        1,
+        5
+      ],
+      "see_through": false,
+      "camera": "rtsp://CCTV_IP/ev04",
+      "one_floor_sec": 18.0
+    },
+    {
+      "id": 5,
+      "floors": [
+        1,
+        5
+      ],
+      "see_through": false,
+      "camera": "rtsp://CCTV_IP/ev05",
+      "one_floor_sec": 18.0
+    },
+    {
+      "id": 6,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev06",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "_note": "층 범위를 현장에 맞게 수정",
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 7,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev07",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 8,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev08",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 9,
+      "floors": [
+        1,
+        3
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev09",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 10,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev10",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 11,
+      "floors": [
+        1,
+        3
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev11",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 12,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev12",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 10.0
+    },
+    {
+      "id": 13,
+      "floors": [
+        1,
+        1
+      ],
+      "see_through": true,
+      "camera": "rtsp://CCTV_IP/ev13",
+      "window_roi": [
+        0.0,
+        0.0,
+        0.3,
+        0.6
+      ],
+      "one_floor_sec": 12.0
+    }
   ]
 }

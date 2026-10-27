@@ -55,3 +55,11 @@ def test_stuck_closed_see_through():
 def test_empty_car_door_cycle_is_ignored():
     ev = run(True, [(0, True, 0, 0), (3, False, 0, 0), (6, True, 0, 0), (20, True, 0, 0)])
     assert ev == []
+
+
+def test_measured_floor_times():
+    from elevator_monitor.config import load_config
+    c = load_config("config/elevators.json")
+    assert c[1].one_floor_sec == 18 and c[7].one_floor_sec == 10 and c[13].one_floor_sec == 12
+    assert abs(c[1].min_travel_sec - 12.6) < 1e-9 and abs(c[7].min_travel_sec - 7.0) < 1e-9
+    assert c[1].max_closed_sec == 2 * 18 * 4 + 30
