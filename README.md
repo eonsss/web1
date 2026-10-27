@@ -15,7 +15,7 @@
 - 빈 카의 문 개폐, 문만 다시 열리고 아무도 안 내리는 경우는 무시.
 
 ## 구성
-- `config/elevators.json` – 13대 설정. 1,4,5호기=1~5층, 9,11호기=1~3층, 2,3,6,8,10,12,13호기=1~2층 반영. **7호기만 층 범위 미확정(`[1,1]` 임시값)**.
+- `config/elevators.json` – 13대 설정. 1,4,5호기=1~5층, 9,11호기=1~3층, 2,3,6,7,8,10,12,13호기=1~2층 반영(전 호기 확정)..
 - `vision.py` – 문 개폐(기준 이미지 비교), 창밖 움직임(광학흐름), 인원수(YOLO, 없으면 근사치)
 - `alerts.py` – 로그(`faults.jsonl`) + 웹훅(선택)
 - `tests/` – 시나리오 시뮬레이션 테스트 (`pytest`)
@@ -29,7 +29,7 @@ python -m elevator_monitor.main --config config/elevators.json --webhook <URL> -
 
 ## 현장 적용 전 필수 보정
 실제 영상 없이 만든 초기 버전이라 아래 값은 **현장 영상으로 조정**해야 합니다.
-1. `door_roi`, `window_roi` (카메라 화각별 문/유리창 위치) 및 문 임계값(`DoorStateEstimator.hi/lo`)
+1. `door_roi`, `window_roi` – `python -m elevator_monitor.pick_roi --id 6` 으로 화면에서 드래그해 지정(기준 사진도 함께 저장) 및 문 임계값(`DoorStateEstimator.hi/lo`)
 2. `one_floor_sec` – 호기별 실측값(현재 1~5호기 18초, 6~12호기 10초, 13호기 12초)이 들어 있음. 인식 지연이 크면 `min_travel_sec`을 직접 지정
 3. `MOTION_THRESHOLD` / 광학흐름 보정상수, 인원수 근사치(YOLO 설치 권장)
 4. 먼저 알림 없이 로그만으로 1~2주 돌려 오탐률을 보고 임계값을 정하세요.
